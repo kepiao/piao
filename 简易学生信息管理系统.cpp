@@ -13,7 +13,7 @@ struct Student* headP = NULL;
 struct Student* tailP = NULL;
 void printStudent(struct Student* curp)
 {
-	printf("ѧ�ţ�%d  ���䣺%d  ������%s\n", curp->stuid, curp->stuage, curp->stuname);
+	printf("学号：%d  年龄：%d  姓名：%s\n", curp->stuid, curp->stuage, curp->stuname);
 }
 void printLinkedliat(struct Student* headP)
 {
@@ -26,11 +26,11 @@ void printLinkedliat(struct Student* headP)
 void addStudent()
 {
 	struct Student* nodeP = (struct Student*)malloc(sizeof(struct Student));
-	printf("������ѧ�ţ�");
+	printf("请输入学号：");
 	scanf_s("%d", &nodeP->stuid);
-	printf("���������䣺");
+	printf("请输入年龄：");
 	scanf_s("%d", &nodeP->stuage);
-	printf("������������");
+	printf("请输入姓名：");
 	scanf_s("%d", &nodeP->stuname);
 	nodeP->next = NULL;
 	if (headP == NULL)
@@ -43,12 +43,12 @@ void addStudent()
 		tailP->next = nodeP;
 		tailP = nodeP;
 	}
-	printf("���ӳɹ�\n");
+	printf("添加成功\n");
 }
 
 void findStudent()
 {
-	printf("��������Ҫ��ѯ��ѧ��ѧ�ţ�");
+	printf("请输入想要查询的学生学号：");
 	int id;
 	scanf_s("%d", &id);
 	struct Student* curP = headP;
@@ -68,7 +68,7 @@ void findStudent()
 	}
 	if (flag == 0)
 	{
-		printf("û�����ѧ��\n");
+		printf("没有这个学生\n");
 	}
 }
 
@@ -76,7 +76,7 @@ void printAllStudent()
 {
 	if (headP == NULL)
 	{
-		printf("��ǰû��ѧ��\n");
+		printf("当前没有学生\n");
 	}
 	else
 	{
@@ -85,7 +85,7 @@ void printAllStudent()
 }
 int deleteStudent()
 {
-	printf("������Ҫɾ����ѧ��ѧ�ţ�");
+	printf("请输入要删除的学生学号：");
 	int id;
 	scanf_s("%d", &id);
 	struct Student* curP = headP;
@@ -106,7 +106,7 @@ int deleteStudent()
 			preP->next = next;
 			free(curP);
 			curP = NULL;
-			printf("�Ѿ�ɾ��\n");
+			printf("已经删除\n");
 			return 0;
 		}
 		else
@@ -115,17 +115,17 @@ int deleteStudent()
 			curP = curP->next;
 		}
 	}
-	printf("��ѧ�������ڣ��޷�ɾ��\n");
+	printf("该学生不存在，无法删除\n");
 }
 int main()
 {
 	printf("           ===================================================\n");
-	printf("          =            ��ӭʹ��ѧ����Ϣ����ϵͳ             =\n");
-	printf("          =           1=¼��ѧ����Ϣ     2=��ѯѧ����Ϣ     =\n");
-	printf("          =           3=ɾ��ѧ����Ϣ     4=��ӡ����ѧ����Ϣ =\n");
-	printf("          =           5=�˳�ϵͳ                            =\n");
+	printf("          =            欢迎使用学生信息管理系统             =\n");
+	printf("          =           1=录入学生信息     2=查询学生信息     =\n");
+	printf("          =           3=删除学生信息     4=打印所有学生信息 =\n");
+	printf("          =           5=退出系统                            =\n");
 	printf("           ===================================================\n");
-	printf("��ѡ��:");
+	printf("请选择:");
 	while (1)
 	{
 		char c;

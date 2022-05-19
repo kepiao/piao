@@ -1,31 +1,76 @@
-﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.1.32328.378
-MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "冬奥奖牌排序", "冬奥奖牌排序\冬奥奖牌排序.vcxproj", "{D1FC75DF-6D40-4D4A-9E1D-2FA950C71CB2}"
-EndProject
-Global
-	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|x64 = Debug|x64
-		Debug|x86 = Debug|x86
-		Release|x64 = Release|x64
-		Release|x86 = Release|x86
-	EndGlobalSection
-	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{D1FC75DF-6D40-4D4A-9E1D-2FA950C71CB2}.Debug|x64.ActiveCfg = Debug|x64
-		{D1FC75DF-6D40-4D4A-9E1D-2FA950C71CB2}.Debug|x64.Build.0 = Debug|x64
-		{D1FC75DF-6D40-4D4A-9E1D-2FA950C71CB2}.Debug|x86.ActiveCfg = Debug|Win32
-		{D1FC75DF-6D40-4D4A-9E1D-2FA950C71CB2}.Debug|x86.Build.0 = Debug|Win32
-		{D1FC75DF-6D40-4D4A-9E1D-2FA950C71CB2}.Release|x64.ActiveCfg = Release|x64
-		{D1FC75DF-6D40-4D4A-9E1D-2FA950C71CB2}.Release|x64.Build.0 = Release|x64
-		{D1FC75DF-6D40-4D4A-9E1D-2FA950C71CB2}.Release|x86.ActiveCfg = Release|Win32
-		{D1FC75DF-6D40-4D4A-9E1D-2FA950C71CB2}.Release|x86.Build.0 = Release|Win32
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {801DC75A-8288-4AEF-9831-1695F26778E0}
-	EndGlobalSection
-EndGlobal
+#include<stdio.h>
+
+struct JPXX
+{
+	char gjm[100];
+	int jps;
+	int yps;
+	int tps;
+	int hj;
+};
+
+typedef struct JPXX jpxx;
+
+jpxx c[8];
+
+void sort(jpxx c[], int n)
+{
+	for (int i = 0; i < n; i++)
+	{
+		for (int j = 0; j < n - 1; j++)
+		{
+			if (c[j].jps < c[j + 1].jps)
+			{
+				jpxx t = c[j];
+				c[j] = c[j + 1];
+				c[j + 1] = t;
+			}
+		}
+	}
+}
+
+void readFile()//打开文件并存入结构体函数
+{
+	FILE* fp = fopen("D://ke.txt", "r");
+	if (fp == NULL)
+	{
+		printf("文件打开失败！\n");
+		return;
+	}
+	for (int i = 0; i < 8; i++)
+	{
+		fscanf(fp,"%s\t%d\t%d\t%d\t%d\n",
+			c[i].gjm, &c[i].jps,& c[i].yps, &c[i].tps,& c[i].hj);
+	}
+	fclose(fp);
+
+}
+
+void writeFile()//保存结果到文件
+{
+	FILE* outfp = fopen("D://冬奥奖牌金牌排序.txt", "w");
+	if (outfp == NULL)
+	{
+		printf("存盘失败！");
+			return;
+	}
+	for (int i = 0; i < 8; i++)
+	{
+		fprintf(outfp, "%s\t%d\t%d\t%d\t%d\n",
+			c[i].gjm, c[i].jps,c[i].yps, c[i].tps, c[i].hj);
+	}
+	
+	if(fclose(outfp)==0);
+	printf("数据保存成功！");
+}
+
+
+
+int main()
+{
+	readFile();
+	sort(c, 8);
+	writeFile();
+
+	return 0;
+}

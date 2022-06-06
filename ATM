@@ -1,29 +1,127 @@
 #include<stdio.h>
 #include <string.h>
+#include<stdlib.h>//system("cls")（清屏）函数头文件
+#include <cstdlib>//exit(0)（主函数之外退出程序）函数头文件
 
 struct Account//定义账户
 {   
-	char name[100];
-	char idCard[19];
-	char username[100];
-	char password[7];
-	char tel[12];
-	char balance[100];
-	float money;
+	char name[100];//姓名
+	char idCard[19];//身份证号
+	char username[100];//账号
+	char password[7];//密码
+	char tel[12];//手机号
+	float money;//余额
 };
 
 typedef struct Account Account;
 
 Account a[100];
 int i = 0;
+char accountId[20], password[20];//定义一个临时数组用于存放登录时输入的账号密码
+int j = 0;
+int x = 0;
+
+//判断账号密码是否正确，正确返回1，错误返回0
+int findAccount( )
+{
+	for (x=0; x <= j; x++)
+	{
+		if (( strcmp(accountId, a[x].username) == 0) && strcmp(password, a[x].password) == 0)
+		{
+			system("cls");
+			return 1;
+		}
+		else
+		{
+			return 0;
+		}
+	}
+}
+//修改密码函数
+void xgmm()
+{
+	char mima1[20];
+	char mima2[20];
+	
+	printf("请输入原密码：\n");
+	scanf_s("%s", mima1, sizeof(mima1));
+	if (strcmp(mima1,a[x].password)==0)
+	{
+		printf("密码正确\n"); 
+		printf("请输入您的新密码:\n");
+		scanf_s("%s", mima2, sizeof(mima2));
+		
+
+	}
+	else
+	{
+		printf("您输入的密码与原密码不同\n");
+		
+	}
+}
+
+//中文菜单2
+void showChineseMenu2()
+{
+	int i;      //i为客户选择输入的变量
+	while (1)
+	{
+		printf("请选择您需要的业务\n");      //银行业务菜单
+		printf(" ——————————————————\n");
+		printf(" —— 1 取款      ——2 存款     ——\n");
+		printf(" ——————————————————\n");
+		printf(" —— 3 转账      ——4 余额查询 ——\n");
+		printf(" ——————————————————\n");
+		printf(" —— 5 修改密码  ——6 退出     ——\n");
+		printf(" ——————————————————\n");
+		scanf("%d", &i);
+		if (i > 0 && i < 7)
+		{
+			switch (i)
+			{
+			case 1://调用银行取款函数
+				system("cls");
+				
+				break;
+			case 2://调用银行存款函数
+				system("cls");
+				
+				break;
+			case 3:	//调用银行转账函数
+				system("cls");
+				break;
+			case 4://调用银行余额查询函数
+				system("cls");
+				xgmm();
+				break;
+			case 5://调用修改密码函数
+				system("cls");
+				xgmm();
+				break;
+			case 6://退出
+				system("cls");
+				printf("谢谢使用\n");
+				exit(0);
+				break;
+			}
+		}
+		else
+		{
+			printf("您的输入有误\n");
+			system("cls");
+		}
+	}
+
+}
 
 
-void signIn()//登录
+
+//登录函数
+void signIn()
 {
 	FILE* fp = fopen("D:/atm.txt", "r");
 	if (fp != NULL)
 	{
-		int j = 0;
 		while (!feof(fp))
 		{
 			fscanf(fp,"%s\t%s\t%s\t%s\t%s\n",
@@ -31,6 +129,34 @@ void signIn()//登录
 			j++;
 		}
 	}
+	for (int k = 0; k < 3; k++)
+	{
+		
+		int i = 0;
+		printf("请输入账号：");
+		scanf_s("%s", accountId, sizeof(accountId));
+		printf("请输入密码：");
+		scanf_s("%s", password, sizeof(password));
+		
+		
+		if (findAccount())
+		{
+			printf("登陆成功！");
+			printf(" % s\t % s\t % s\t % s\t % s\n",
+				a[x].name, a[x].idCard, a[x].username, a[x].password, a[x].tel);
+			showChineseMenu2();
+			break;
+		}
+		else
+		{
+			if(k<2)
+			printf("账号密码错误！还有%d次机会\n",2-k);
+		}
+		if (k == 2)
+			printf("您已多次错误输入密码，账号已被锁定！");
+	}
+
+
 }
 
 
@@ -107,37 +233,41 @@ void printAllAccount()//打印所有账户
 		printf("%s\t%s\n", a[j].name, a[j].username);
 	}
 }
-
-void showChineseMenu()//中文菜单
+//中文菜单1
+void showChineseMenu1()
 {
-	printf("按1,登录\n");
-	printf("按2,开户\n");
-	printf("按3,退出\n");
-	printf("按4,打印所有帐户\n");
+	printf("请选择您需要的业务：\n");      //银行业务菜单//
+	printf(" ————————————————\n");
+	printf(" —— 1 登录                 ——\n");
+	printf(" —— 2 开户                 ——\n");
+	printf(" —— 3 退出                 ——\n");
+	printf(" ————————————————\n");
+
 	while (1)
 	{
 		char c;
 		scanf_s(" %c", &c, sizeof(c));
+		system("cls");
 		if (c == '1')
 		{
-			signIn();
+			signIn();//登录
 		}
 		else if (c == '2')
 		{
-			signUp1();
+			signUp1();//开户
 		}
 		else if (c == '3')
 		{
-			return;
+			return;//退出
 		}
-		else if (c == '4')
+		else if (c == '9')
 		{
 			printAllAccount();
 		}
 	}
 }
-
-void showEnglishMenu()//英文菜单
+//英文菜单1
+void showEnglishMenu1()
 {
 	printf("A,log on\n");//登录
 	printf("B,establish an account\n");//开户
@@ -164,19 +294,27 @@ void showEnglishMenu()//英文菜单
 
 int main()
 {
-	printf("按1,显示中文\n");
-	printf("Input 2,Show English\n");
+	printf("*****************************\n");
+	printf("**欢迎使用ATM自动取款机系统**\n");
+	printf("*****************************\n");
+	printf("——————————————\n");
+	printf("|      按1,显示中文       |\n");
+	printf("——————————————\n");
+	printf("|    Input 2,Show English   |\n");
+	printf("——————————————\n");
+
 	char c;
 	scanf_s("%c", &c, sizeof(c));
+	system("cls");
 	if (c == '1')
 	{
 		//显示中文菜单 
-		showChineseMenu();
+		showChineseMenu1();
 	}
 	else if (c == '2')
 	{
 		//显示英文菜单 
-		showEnglishMenu();
+		showEnglishMenu1();
 	}
 	return 0;
 }

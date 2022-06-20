@@ -4,7 +4,7 @@
 #include <cstdlib>//exit(0)（主函数之外退出程序）函数头文件
 
 struct Account//定义账户
-{   
+{
 	char name[100];//姓名
 	char idCard[19];//身份证号
 	char username[100];//账号
@@ -12,54 +12,59 @@ struct Account//定义账户
 	char tel[12];//手机号
 	float money;//余额
 };
-
 typedef struct Account Account;
 
 Account a[100];
 int i = 0;
 char accountId[20], password[20];//定义一个临时数组用于存放登录时输入的账号密码
 int j = 0;
-int x = 0;
+int x = 0;	
 
-//判断账号密码是否正确，正确返回1，错误返回0
-int findAccount( )
+
+void showEnglishMenu1();//中文菜单1
+void showChineseMenu1();//英文菜单1
+void showChineseMenu2();//用户界面1
+//用户界面2
+void signIn();//登录
+int findAccount();//密码判断
+void signUp1();//开户（中文）
+void signUp2();//开户（英文）
+
+void qukuan();//取款
+void deposit();//存款
+void transfer();//转账
+void balance();//余额查询
+void xgmm();//修改密码
+void baocun();//保存数据
+
+int main()
 {
-	for (x=0; x <= j; x++)
-	{
-		if (( strcmp(accountId, a[x].username) == 0) && strcmp(password, a[x].password) == 0)
-		{
-			system("cls");
-			return 1;
-		}
-		else
-		{
-			return 0;
-		}
-	}
-}
-//修改密码函数
-void xgmm()
-{
-	char mima1[20];
-	char mima2[20];
-	
-	printf("请输入原密码：\n");
-	scanf_s("%s", mima1, sizeof(mima1));
-	if (strcmp(mima1,a[x].password)==0)
-	{
-		printf("密码正确\n"); 
-		printf("请输入您的新密码:\n");
-		scanf_s("%s", mima2, sizeof(mima2));
-		
+	printf("*****************************\n");
+	printf("**欢迎使用ATM自动取款机系统**\n");
+	printf("*****************************\n");
+	printf("——————————————\n");
+	printf("|      按1,显示中文       |\n");
+	printf("——————————————\n");
+	printf("|    Input 2,Show English   |\n");
+	printf("——————————————\n");
 
-	}
-	else
+	char c;
+	scanf_s("%c", &c, sizeof(c));
+	system("cls");
+	if (c == '1')
 	{
-		printf("您输入的密码与原密码不同\n");
-		
+		//显示中文菜单 
+		showChineseMenu1();
 	}
+	else if (c == '2')
+	{
+		//显示英文菜单 
+		showEnglishMenu1();
+	}
+	return 0;
 }
 
+//********************************************************************************************************************
 //中文菜单2
 void showChineseMenu2()
 {
@@ -81,22 +86,27 @@ void showChineseMenu2()
 			{
 			case 1://调用银行取款函数
 				system("cls");
-				
+				qukuan();
+				baocun();
 				break;
 			case 2://调用银行存款函数
 				system("cls");
-				
+				deposit();
+				baocun();
 				break;
 			case 3:	//调用银行转账函数
 				system("cls");
+				transfer();
+				baocun();
 				break;
 			case 4://调用银行余额查询函数
 				system("cls");
-				xgmm();
+				balance();
 				break;
 			case 5://调用修改密码函数
 				system("cls");
 				xgmm();
+				baocun();
 				break;
 			case 6://退出
 				system("cls");
@@ -114,8 +124,7 @@ void showChineseMenu2()
 
 }
 
-
-
+//********************************************************************************************************************
 //登录函数
 void signIn()
 {
@@ -124,43 +133,41 @@ void signIn()
 	{
 		while (!feof(fp))
 		{
-			fscanf(fp,"%s\t%s\t%s\t%s\t%s\n",
-				a[j].name, a[j].idCard, a[j].username, a[j].password, a[j].tel);
+			fscanf(fp, "%s\t%s\t%s\t%s\t%s\t%f\n",
+				a[j].name, a[j].idCard, a[j].username, a[j].password, a[j].tel, &a[j].money);
 			j++;
 		}
 	}
+	fclose(fp);
 	for (int k = 0; k < 3; k++)
 	{
-		
+
 		int i = 0;
 		printf("请输入账号：");
 		scanf_s("%s", accountId, sizeof(accountId));
 		printf("请输入密码：");
 		scanf_s("%s", password, sizeof(password));
-		
-		
+
 		if (findAccount())
 		{
-			printf("登陆成功！");
-			printf(" % s\t % s\t % s\t % s\t % s\n",
-				a[x].name, a[x].idCard, a[x].username, a[x].password, a[x].tel);
+			printf("登陆成功！\n");
+			printf("姓名：%s\t余额：%f\n", a[x].name, a[x].money);
 			showChineseMenu2();
 			break;
 		}
 		else
 		{
-			if(k<2)
-			printf("账号密码错误！还有%d次机会\n",2-k);
+			if (k < 2)
+				printf("账号密码错误！还有%d次机会\n", 2 - k);
 		}
 		if (k == 2)
 			printf("您已多次错误输入密码，账号已被锁定！");
 	}
-
-
 }
 
-
-void signUp1()//开户（中文）
+//********************************************************************************************************************
+//开户（中文）
+void signUp1()
 {
 	printf("请输入姓名：\n");
 	scanf_s("%s", a[i].name, sizeof(a[i].name));
@@ -178,13 +185,13 @@ void signUp1()//开户（中文）
 	scanf_s("%s", a[i].tel, sizeof(a[i].tel));
 
 	a[i].money = 0.0f;
-	
+
 
 	FILE* fp = fopen("D:/atm.txt", "a");//存入文件（a表示追加写入）
 	if (fp != NULL)
 	{
-		fprintf(fp, "%s\t%s\t%s\t%s\t%s\n",
-			a[i].name, a[i].idCard, a[i].username, a[i].password, a[i].tel);
+		fprintf(fp, "%s\t%s\t%s\t%s\t%s\t%f\n",
+			a[i].name, a[i].idCard, a[i].username, a[i].password, a[i].tel, a[i].money);
 		fclose(fp);
 	}
 
@@ -216,8 +223,8 @@ void signUp2()//开户（英文）
 	FILE* fp = fopen("D:/atm.txt", "a");//存入文件（a表示追加写入）
 	if (fp != NULL)
 	{
-		fprintf(fp, "%s\t%s\t%s\t%s\t%s\n",
-			a[i].name, a[i].idCard, a[i].username, a[i].password, a[i].tel);
+		fprintf(fp, "%s\t%s\t%s\t%s\t%s\t%f\n",
+			a[i].name, a[i].idCard, a[i].username, a[i].password, a[i].tel, a[i].money);
 		fclose(fp);
 	}
 	i++;
@@ -226,13 +233,7 @@ void signUp2()//开户（英文）
 	printf("Please continue to press the menu\n");
 }
 
-void printAllAccount()//打印所有账户
-{
-	for (int j = 0; j < i; j++)
-	{
-		printf("%s\t%s\n", a[j].name, a[j].username);
-	}
-}
+//********************************************************************************************************************
 //中文菜单1
 void showChineseMenu1()
 {
@@ -259,10 +260,6 @@ void showChineseMenu1()
 		else if (c == '3')
 		{
 			return;//退出
-		}
-		else if (c == '9')
-		{
-			printAllAccount();
 		}
 	}
 }
@@ -292,29 +289,182 @@ void showEnglishMenu1()
 	}
 }
 
-int main()
-{
-	printf("*****************************\n");
-	printf("**欢迎使用ATM自动取款机系统**\n");
-	printf("*****************************\n");
-	printf("——————————————\n");
-	printf("|      按1,显示中文       |\n");
-	printf("——————————————\n");
-	printf("|    Input 2,Show English   |\n");
-	printf("——————————————\n");
+//********************************************************************************************************************
 
-	char c;
-	scanf_s("%c", &c, sizeof(c));
-	system("cls");
-	if (c == '1')
+//判断账号密码是否正确，正确返回1，错误返回0
+int findAccount()
+{
+	for (x; x <= j; x++)
 	{
-		//显示中文菜单 
-		showChineseMenu1();
+		if ((strcmp(accountId, a[x].username) == 0) && (strcmp(password, a[x].password) == 0))
+		{
+			system("cls");
+			return 1;
+			break;
+		}
 	}
-	else if (c == '2')
+	return 0; 
+	
+}
+//修改密码函数
+void xgmm()
+{
+	char mima1[20];
+	char mima2[20];
+
+	printf("请输入原密码：\n");
+	scanf_s("%s", mima1, sizeof(mima1));
+	if (strcmp(mima1, a[x].password) == 0)
 	{
-		//显示英文菜单 
-		showEnglishMenu1();
+		printf("密码正确\n");
+		printf("请输入您的新密码:\n");
+		scanf_s("%s", a[x].password, sizeof(a[x].password));
+		printf("修改成功！\n");
+	}
+	else
+	{
+		printf("您输入的密码与原密码不同\n");
+
+	}
+}
+
+//********************************************************************************************************************
+//余额查询
+void balance()
+{
+	printf("\n您的余额为：%.2f\n", a[x].money);
+}
+
+//********************************************************************************************************************
+//存款函数
+void deposit()
+{
+	int n;
+	printf("请输入你的存款金额(单笔存款金额不可超过2w且要为100的整数倍):\n");
+	while (1)
+	{
+		scanf_s("%d", &n);
+		if (n <= 20000 && n % 100 == 0)
+		{
+			a[x].money += n;
+			printf("存款成功!");
+			printf("\n您的余额为%.6f\n", a[x].money);
+			break;
+		}
+		else
+		{
+			printf("请重新输入金额:");
+		}
+	}
+}
+
+//********************************************************************************************************************
+//取款函数
+void qukuan()
+{
+	int n;
+	printf("请输入你的取款金额(单笔存款金额不可超过2w且要为100的整数倍):\n");
+	while (1)
+	{
+		scanf_s("%d", &n);
+		if (a[x].money >= n)
+		{
+			if (n <= 20000 && n % 100 == 0)
+			{
+				a[x].money -= n;
+				printf("取款成功!");
+				printf("\n您的余额为%.6f\n", a[x].money);
+				break;
+			}
+			else
+			{
+				printf("请重新输入金额:");
+			}
+		}
+		else
+		{
+			printf("余额不足！请重新输入：\n");
+		}
+	}
+}
+
+
+//********************************************************************************************************************
+//转账
+int yanzheng();//验证对方账号
+void transfer()
+{
+	int z;
+	printf("请输入对方帐号");
+	char accountId[100];
+	scanf("%s", accountId);
+	for (z = 0; z <= j; z++)
+	{
+		if (strcmp(accountId, a[z].username) == 0)
+		{
+			system("cls");
+			break;
+		}
+
+	}
+	if (yanzheng())
+	{
+		printf("%f\t%f\n", a[x].money, a[z].money);
+		printf("OK,请输入金额");
+		float n=0;
+		if (a[x].money >= n)
+		{
+			while (1)
+			{
+				scanf("%f", &n);
+				if (n <= 20000 && int(n) % 100 == 0)
+				{
+					a[x].money -= n;
+					a[z].money += n;
+					printf("转账成功!");
+					printf("\n您的余额为%.2f\n对方余额为%.2f\n", a[x].money, a[z].money);
+					break;
+				}
+				else
+				{
+					printf("请重新输入金额:");
+				}
+			}
+		}
+	}
+}
+
+//验证对方帐号
+int yanzheng()
+{
+	for (int z=0; z <= j; z++)
+	{
+		if (strcmp(accountId, a[z].username) == 0)
+		{
+			
+			return 1;
+		}
+		
 	}
 	return 0;
 }
+
+//********************************************************************************************************************
+//保存数据
+void baocun()
+{
+	FILE* fp = fopen("D:/atm.txt", "w");
+	if (fp != NULL)
+	{
+		for (int w=0;w <= j; w++)
+		{
+			fprintf( fp,"%s\t%s\t%s\t%s\t%s\t%.2f\n",
+				a[w].name, a[w].idCard, a[w].username, a[w].password, a[w].tel, a[w].money);
+		}
+		printf("保存成功！");
+	}
+	fclose(fp);
+}
+
+
+
